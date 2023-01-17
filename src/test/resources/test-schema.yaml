@@ -1,0 +1,22 @@
+multiLineSupport: true
+singleLineRegex: ^(?<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}\+\d{2}:\d{2})\s+(?<level>\w+)\s+(?<pid>\d+)\s+---\s+\[\s*(?<thread>[^]]+)]\s+(?<logger>.+?)\s+:\s+(?<message>.*)$
+multiLineRegex: (?s)^(?<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}\+\d{2}:\d{2})\s+(?<level>\w+)\s+(?<pid>\d+)\s+---\s+\[\s*(?<thread>[^]]+)]\s+(?<logger>.+?)\s+:\s+(?<message>.*)$
+example:
+  singleLine:
+    input: "2023-02-14T22:14:30.296+03:00  INFO 1428 --- [           main] com.example.demo.DemoApplication         : Starting DemoApplication using Java 17.0.3 with PID 1428"
+    expected:
+      timestamp: "2023-02-14T22:14:30.296+03:00"
+      level: "INFO"
+      pid: "1428"
+      thread: "main"
+      logger: "com.example.demo.DemoApplication"
+      message: "Starting DemoApplication using Java 17.0.3 with PID 1428"
+  multiLine:
+    input: "2023-02-14T22:14:32.970+03:00 DEBUG 1428 --- [           main] org.hibernate.SQL                        : drop table if exists foo cascade\nHibernate: drop table if exists foo cascade"
+    expected:
+      timestamp: "2023-02-14T22:14:32.970+03:00"
+      level: "DEBUG"
+      pid: "1428"
+      thread: "main"
+      logger: "org.hibernate.SQL"
+      message: "drop table if exists foo cascade\nHibernate: drop table if exists foo cascade"

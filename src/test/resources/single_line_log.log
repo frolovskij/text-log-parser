@@ -1,0 +1,4 @@
+1 A xxx
+2 B yyy
+------- this line doesn't match the pattern
+3 C zzz

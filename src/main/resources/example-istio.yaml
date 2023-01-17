@@ -1,0 +1,29 @@
+multiLineSupport: false
+singleLineRegex: ^\[(?<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)] "(?<method>\S+) (?<path>\S+) (?<protocol>\S+)" (?<responseCode>\d+) (?<responseFlags>\S+) "(?<unknown1>[^"]*)" "(?<unknown2>[^"]*)" (?<bytesReceived>\d+) (?<bytesSent>\d+) (?<duration>\d+) (?<xEnvoyUpstreamServiceTime>\d+) "(?<xForwardedFor>[^"]*)" "(?<userAgent>[^"]*)" "(?<xRequestId>[^"]*)" "(?<authority>[^"]*)" "(?<upstreamHost>[^"]*)" (?<upstreamCluster>\S+) (?<upstreamLocalAddress>\S+) (?<downstreamLocalAddress>\S+) (?<downstreamRemoteAddress>\S+) (?<requestedServerName>\S+) (?<routeName>\S+)$
+example:
+  singleLine:
+    input: "[2023-01-31T08:56:24.744Z] \"GET /actuator/prometheus HTTP/2\" 200 - \"-\" \"-\" 0 19150 23 23 \"29.64.10.1\" \"insomnia/2022.4.2\" \"0d475d49-6e61-9f08-baad-cdae2294212b\" \"a.b.c.d.e.f.com\" \"29.64.97.67:8080\" outbound|8080|xxx|yyy.z.svc.cluster.local 29.64.49.69:55226 29.64.49.69:5443 29.64.10.1:50170 a.b.c.d.f.com -"
+    expected:
+      timestamp: "2023-01-31T08:56:24.744Z",
+      method: "GET",
+      path: "/actuator/prometheus",
+      protocol: "HTTP/2",
+      responseCode: "200",
+      responseFlags: "-",
+      unknown1: "-",
+      unknown2: "-",
+      bytesReceived: "0",
+      bytesSent: "19150",
+      duration: "23",
+      xEnvoyUpstreamServiceTime: "23",
+      xForwardedFor: "29.64.10.1",
+      userAgent: "insomnia/2022.4.2",
+      xRequestId: "0d475d49-6e61-9f08-baad-cdae2294212b",
+      authority: "a.b.c.d.e.f.com",
+      upstreamHost: "29.64.97.67:8080",
+      upstreamCluster: "outbound|8080|xxx|yyy.z.svc.cluster.local",
+      upstreamLocalAddress: "29.64.49.69:55226",
+      downstreamLocalAddress: "29.64.49.69:5443",
+      downstreamRemoteAddress: "29.64.10.1:50170",
+      requestedServerName: "a.b.c.d.f.com",
+      routeName: "-"

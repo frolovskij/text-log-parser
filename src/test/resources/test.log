@@ -1,0 +1,25 @@
+2023-02-14T22:14:30.296+03:00  INFO 1428 --- [           main] com.example.demo.DemoApplication         : Starting DemoApplication using Java 17.0.3 with PID 1428
+2023-02-14T22:14:30.298+03:00  INFO 1428 --- [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-02-14T22:14:30.878+03:00  INFO 1428 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-14T22:14:30.940+03:00  INFO 1428 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 47 ms. Found 1 JPA repository interfaces.
+2023-02-14T22:14:31.440+03:00  INFO 1428 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-14T22:14:31.450+03:00  INFO 1428 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-14T22:14:31.451+03:00  INFO 1428 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.5]
+2023-02-14T22:14:31.566+03:00  INFO 1428 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-14T22:14:31.567+03:00  INFO 1428 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1205 ms
+2023-02-14T22:14:31.670+03:00  INFO 1428 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-14T22:14:31.873+03:00  INFO 1428 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:442399e9-1643-4fe1-8478-56bd48989882 user=SA
+2023-02-14T22:14:31.874+03:00  INFO 1428 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-14T22:14:31.918+03:00  INFO 1428 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-14T22:14:31.988+03:00  INFO 1428 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.1.6.Final
+2023-02-14T22:14:32.178+03:00  WARN 1428 --- [           main] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+2023-02-14T22:14:32.341+03:00  INFO 1428 --- [           main] SQL dialect                              : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2023-02-14T22:14:32.970+03:00 DEBUG 1428 --- [           main] org.hibernate.SQL                        : drop table if exists foo cascade
+Hibernate: drop table if exists foo cascade
+2023-02-14T22:14:32.976+03:00 DEBUG 1428 --- [           main] org.hibernate.SQL                        : create table foo (id uuid not null, name varchar(255), primary key (id))
+Hibernate: create table foo (id uuid not null, name varchar(255), primary key (id))
+2023-02-14T22:14:32.982+03:00  INFO 1428 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-14T22:14:32.991+03:00  INFO 1428 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-14T22:14:33.016+03:00  WARN 1428 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-14T22:14:33.435+03:00  INFO 1428 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-14T22:14:33.440+03:00  INFO 1428 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 3.523 seconds (process running for 4.001)
