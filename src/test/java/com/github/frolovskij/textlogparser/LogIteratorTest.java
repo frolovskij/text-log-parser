@@ -50,10 +50,7 @@ class LogIteratorTest {
 
     @Test
     void testMultiLineLog() throws Exception {
-        Schema schema = new Schema();
-        schema.setMultiLineSupport(true);
-        schema.setSingleLineRegex("^(?<f1>\\d+) (?<f2>\\S+) (?<f3>.+)$");
-        schema.setMultiLineRegex("(?s)^(?<f1>\\d+) (?<f2>\\S+) (?<f3>.+)$");
+        Schema schema = getTestMultiLineSchema();
 
         List<LogEvent> events = new ArrayList<>();
         Path path = Paths.get("src/test/resources/multi_line_log.log");
@@ -83,6 +80,48 @@ class LogIteratorTest {
         Assertions.assertEquals("3", adapter.group("f1"));
         Assertions.assertEquals("C", adapter.group("f2"));
         Assertions.assertEquals(String.format("zzz1%nzzz2"), adapter.group("f3"));
+    }
+
+    @Test
+    void testMultiLineLogWithFirstLineNotMatchingPattern() throws Exception {
+        Schema schema = getTestMultiLineSchema();
+
+        List<LogEvent> events = new ArrayList<>();
+        Path path = Paths.get("src/test/resources/multi_line_log_w_garbage.log");
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            LogIterator iterator = new LogIterator(reader, schema);
+            while (iterator.hasNext()) {
+                LogEvent next = iterator.next();
+                events.add(next);
+            }
+        }
+
+        LogEventAdapter adapter = new LogEventAdapter(schema);
+
+        Assertions.assertEquals(3, events.size());
+
+        adapter.setLogEvent(events.get(0));
+        Assertions.assertEquals("1", adapter.group("f1"));
+        Assertions.assertEquals("A", adapter.group("f2"));
+        Assertions.assertEquals("xxx1", adapter.group("f3"));
+
+        adapter.setLogEvent(events.get(1));
+        Assertions.assertEquals("2", adapter.group("f1"));
+        Assertions.assertEquals("B", adapter.group("f2"));
+        Assertions.assertEquals(String.format("yyy1%nyyy2%nyyy3"), adapter.group("f3"));
+
+        adapter.setLogEvent(events.get(2));
+        Assertions.assertEquals("3", adapter.group("f1"));
+        Assertions.assertEquals("C", adapter.group("f2"));
+        Assertions.assertEquals(String.format("zzz1%nzzz2"), adapter.group("f3"));
+    }
+
+    private Schema getTestMultiLineSchema() {
+        Schema schema = new Schema();
+        schema.setMultiLineSupport(true);
+        schema.setSingleLineRegex("^(?<f1>\\d+) (?<f2>\\S+) (?<f3>.+)$");
+        schema.setMultiLineRegex("(?s)^(?<f1>\\d+) (?<f2>\\S+) (?<f3>.+)$");
+        return schema;
     }
 
 }

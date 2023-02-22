@@ -98,6 +98,9 @@ public class LogIterator implements Iterator<LogEvent> {
                         multiLineEvent.append(line);
                     }
                 } else {
+                    if (multiLineEvent.length() == 0) {
+                        continue;
+                    }
                     multiLineEvent.append(System.lineSeparator());
                     multiLineEvent.append(line);
                 }
