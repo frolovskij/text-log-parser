@@ -88,7 +88,7 @@ public class RunnerTest {
                         "--" + RunnerParams.OPT_INPUT_FILE.getLongOpt(),
                         TEST_LOG,
                         "--" + RunnerParams.OPT_INPUT_FILTER.getLongOpt(),
-                        "group('logger') == 'com.example.demo.DemoApplication'"
+                        "#logger == 'com.example.demo.DemoApplication'"
                 }));
         String expected = "2023-02-14T22:14:30.296+03:00  INFO 1428 --- [           main] " +
                 "com.example.demo.DemoApplication         : " +
@@ -114,9 +114,9 @@ public class RunnerTest {
                         "--" + RunnerParams.OPT_INPUT_FILE.getLongOpt(),
                         TEST_LOG,
                         "--" + RunnerParams.OPT_INPUT_FILTER.getLongOpt(),
-                        "group('level') == 'WARN'",
+                        "#level == 'WARN'",
                         "--" + RunnerParams.OPT_OUTPUT_FORMAT.getLongOpt(),
-                        "'timestamp = \"' + group('timestamp') + '\"'"
+                        "'timestamp = \"' + #timestamp + '\"'"
                 }));
         String expected = "timestamp = \"2023-02-14T22:14:32.178+03:00\"" +
                 System.lineSeparator() +

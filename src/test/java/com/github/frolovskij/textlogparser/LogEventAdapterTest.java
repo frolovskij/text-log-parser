@@ -2,10 +2,6 @@ package com.github.frolovskij.textlogparser;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.expression.Expression;
-import org.springframework.expression.spel.SpelCompilerMode;
-import org.springframework.expression.spel.SpelParserConfiguration;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,42 +44,6 @@ class LogEventAdapterTest {
 
         Assertions.assertEquals("xxx", adapter.group("f3"));
         Assertions.assertEquals("xxx", adapter.group(3));
-    }
-
-    @Test
-    void testSpel() throws IOException {
-        SpelParserConfiguration config = new SpelParserConfiguration(
-                SpelCompilerMode.IMMEDIATE,
-                Runner.class.getClassLoader());
-        SpelExpressionParser spelExpressionParser = new SpelExpressionParser(config);
-        Expression expression = spelExpressionParser
-                .parseExpression("group('f1') == '1' && group('f2') == 'A' && group('f3') == 'xxx'");
-
-        Schema schema = getSchema();
-        LogEvent event = getLogEvent(schema);
-        LogEventAdapter adapter = new LogEventAdapter(schema);
-
-        adapter.setLogEvent(event);
-
-        Assertions.assertEquals(Boolean.TRUE, expression.getValue(adapter));
-    }
-
-    @Test
-    void testFormat() throws IOException {
-        SpelParserConfiguration config = new SpelParserConfiguration(
-                SpelCompilerMode.IMMEDIATE,
-                Runner.class.getClassLoader());
-        SpelExpressionParser spelExpressionParser = new SpelExpressionParser(config);
-        Expression expression = spelExpressionParser
-                .parseExpression("format('%d: %s', asInt(1), asString('f3'))");
-
-        Schema schema = getSchema();
-        LogEvent event = getLogEvent(schema);
-        LogEventAdapter adapter = new LogEventAdapter(schema);
-
-        adapter.setLogEvent(event);
-
-        Assertions.assertEquals("1: xxx", expression.getValue(adapter));
     }
 
     private Schema getSchema() {

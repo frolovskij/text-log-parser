@@ -1,23 +1,17 @@
 package com.github.frolovskij.textlogparser;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LogEventAdapter {
-
-    private static final Pattern NAMED_GROUP_PATTERN =
-            Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>");
 
     private final Map<String, Integer> indexByName;
 
     private LogEvent logEvent;
 
     public LogEventAdapter(Schema schema) {
-        List<String> fields = getNamedGroupNames(schema);
+        List<String> fields = schema.getNamedGroupNames();
         this.indexByName = buildIndexByNameMap(fields);
     }
 
@@ -68,18 +62,6 @@ public class LogEventAdapter {
             indexByName.put(field, i + 1);
         }
         return indexByName;
-    }
-
-    private static List<String> getNamedGroupNames(Schema schema) {
-        String regex = schema.isMultiLine() ?
-                schema.getMultiLineRegex() :
-                schema.getSingleLineRegex();
-        List<String> namedGroups = new ArrayList<>();
-        Matcher matcher = NAMED_GROUP_PATTERN.matcher(regex);
-        while (matcher.find()) {
-            namedGroups.add(matcher.group(1));
-        }
-        return namedGroups;
     }
 
 }

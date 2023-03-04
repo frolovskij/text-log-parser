@@ -1,5 +1,9 @@
 package com.github.frolovskij.textlogparser;
 
+import com.github.frolovskij.textlogparser.filter.Filter;
+import com.github.frolovskij.textlogparser.filter.SpelFilter;
+import com.github.frolovskij.textlogparser.formatter.Formatter;
+import com.github.frolovskij.textlogparser.formatter.SpelFormatter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -7,10 +11,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.springframework.expression.Expression;
-import org.springframework.expression.spel.SpelCompilerMode;
-import org.springframework.expression.spel.SpelParserConfiguration;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
@@ -29,7 +29,7 @@ public class RunnerParams {
             .longOpt("schema")
             .hasArg()
             .argName("path")
-            .desc("Schema file (*.json)")
+            .desc("Schema file (*.yaml)")
             .required()
             .build();
 
@@ -88,10 +88,10 @@ public class RunnerParams {
     private final Schema schema;
     private final Path inputFile;
     private final Charset inputEncoding;
-    private final Expression inputFilterExpression;
+    private final Filter inputFilterExpression;
     private final Path outputFile;
     private final Charset outputEncoding;
-    private final Expression outputFormatExpression;
+    private final Formatter outputFormatExpression;
 
     public static RunnerParams initFromArgs(String[] args) throws ParseException {
         CommandLineParser commandLineParser = new DefaultParser();
@@ -111,7 +111,7 @@ public class RunnerParams {
         }
 
         if (cmd.getOptionValue(OPT_INPUT_FILTER) != null) {
-            this.inputFilterExpression = compileExpression(cmd.getOptionValue(OPT_INPUT_FILTER));
+            this.inputFilterExpression = new SpelFilter(cmd.getOptionValue(OPT_INPUT_FILTER));
         } else {
             this.inputFilterExpression = null;
         }
@@ -129,7 +129,7 @@ public class RunnerParams {
         }
 
         if (cmd.getOptionValue(OPT_OUTPUT_FORMAT) != null) {
-            this.outputFormatExpression = compileExpression(cmd.getOptionValue(OPT_OUTPUT_FORMAT));
+            this.outputFormatExpression = new SpelFormatter(cmd.getOptionValue(OPT_OUTPUT_FORMAT));
         } else {
             this.outputFormatExpression = null;
         }
@@ -147,7 +147,7 @@ public class RunnerParams {
         return inputEncoding;
     }
 
-    public Expression getInputFilterExpression() {
+    public Filter getInputFilterExpression() {
         return inputFilterExpression;
     }
 
@@ -159,7 +159,7 @@ public class RunnerParams {
         return outputEncoding;
     }
 
-    public Expression getOutputFormatExpression() {
+    public Formatter getOutputFormatExpression() {
         return outputFormatExpression;
     }
 
@@ -179,14 +179,6 @@ public class RunnerParams {
         } catch (ScannerException | IOException ex) {
             throw new RuntimeException("Error reading schema", ex);
         }
-    }
-
-    private Expression compileExpression(String expression) {
-        SpelParserConfiguration config = new SpelParserConfiguration(
-                SpelCompilerMode.IMMEDIATE,
-                Runner.class.getClassLoader());
-        SpelExpressionParser spelExpressionParser = new SpelExpressionParser(config);
-        return spelExpressionParser.parseExpression(expression);
     }
 
     public static void printUsage() {

@@ -11,7 +11,7 @@
 
 ```
 Usage: java -jar log-parser.jar [OPTIONS]
-    --schema <path>           Schema file (*.json)
+    --schema <path>           Schema file (*.yaml)
     --input-file <path>       Input file
     --input-encoding <enc>    Input encoding
     --input-filter <expr>     Filter expression (SpEL)
@@ -44,8 +44,8 @@ multiLineRegex: (?s)^(?<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}\+\d{
 java -jar text-log-parser.jar \
     --schema schema.yaml \
     --input-file input.log \
-    --input-filter "group('level') == 'WARN'" \
-    --output-format "format('%s %s', asString('timestamp'), asString('logger'))"
+    --input-filter "#level == 'WARN'" \
+    --output-format "#timestamp + ' ' + #logger"
 ```
 
 #### Output

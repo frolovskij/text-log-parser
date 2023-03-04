@@ -1,7 +1,8 @@
 package com.github.frolovskij.textlogparser;
 
+import com.github.frolovskij.textlogparser.filter.Filter;
+import com.github.frolovskij.textlogparser.formatter.Formatter;
 import org.apache.commons.cli.ParseException;
-import org.springframework.expression.Expression;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -25,8 +26,8 @@ public class Runner {
 
     private static void run(RunnerParams params) {
         final LogEventAdapter adapter = new LogEventAdapter(params.getSchema());
-        final Expression filter = params.getInputFilterExpression();
-        final Expression formatter = params.getOutputFormatExpression();
+        final Filter filter = params.getInputFilterExpression();
+        final Formatter formatter = params.getOutputFormatExpression();
 
         try (BufferedReader reader = reader(params);
              BufferedWriter writer = writer(params)) {
@@ -53,9 +54,9 @@ public class Runner {
         }
     }
 
-    private static void handleEvent(LogEventAdapter eventAdapter, Expression filter,
-                                    Expression formatter, BufferedWriter bw) throws IOException {
-        boolean pass = filter == null || Boolean.TRUE.equals(filter.getValue(eventAdapter, Boolean.class));
+    private static void handleEvent(LogEventAdapter eventAdapter, Filter filter,
+                                    Formatter formatter, BufferedWriter bw) throws IOException {
+        boolean pass = filter == null || Boolean.TRUE.equals(filter.filter(eventAdapter));
         if (!pass) {
             return;
         }
@@ -63,7 +64,7 @@ public class Runner {
             bw.write(eventAdapter.group(0));
             bw.newLine();
         } else {
-            String value = formatter.getValue(eventAdapter, String.class);
+            String value = formatter.format(eventAdapter);
             if (value != null) {
                 bw.write(value);
                 bw.newLine();
